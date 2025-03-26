@@ -24,13 +24,13 @@ const MenuItem = ({ item }) => {
           className="w-full h-56 object-cover"
         />
 
-        {/* Price tag */}
+        {/* Price tag with improved visibility */}
         <div className="absolute top-0 right-0 bg-red-600 text-white font-bold py-2 px-4 rounded-bl-lg shadow-md">
           ${parseFloat(item.price).toFixed(2)}
         </div>
 
         {!item.is_available && (
-          <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center">
             <div className="bg-red-600 text-white px-6 py-3 rounded-full text-lg font-bold transform -rotate-12 shadow-lg">
               Out of Stock
             </div>
@@ -76,6 +76,7 @@ const MenuItem = ({ item }) => {
             transition-all duration-300 flex items-center justify-center
             ${item.is_available ? 'bg-red-600 hover:bg-red-700 shadow-md hover:shadow-lg' : 'bg-gray-400 cursor-not-allowed'}
           `}
+          aria-label={item.is_available ? `Add ${item.name} to order` : `${item.name} is out of stock`}
         >
           {item.is_available ? (
             <>

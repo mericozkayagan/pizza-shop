@@ -1,0 +1,275 @@
+/* Pizza-themed Styles */
+
+/* Pizza slice separator */
+.pizza-slice-divider {
+  position: relative;
+  height: 40px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.pizza-slice-divider::before,
+.pizza-slice-divider::after {
+  content: '';
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(229, 62, 62, 0.6), transparent);
+  flex-grow: 1;
+}
+
+.pizza-slice-divider .slice-icon {
+  margin: 0 1rem;
+  transform: rotate(45deg);
+  color: rgba(229, 62, 62, 0.8);
+}
+
+/* Pizza crust border */
+.pizza-crust-border {
+  border: 8px solid;
+  border-image: repeating-linear-gradient(
+    45deg,
+    #e2c196,
+    #e2c196 10px,
+    #d4b483 10px,
+    #d4b483 20px
+  ) 8;
+  border-radius: 8px;
+  padding: 1rem;
+  position: relative;
+}
+
+/* Cheese texture background */
+.cheese-texture {
+  background-color: #fcf3d4;
+  background-image: radial-gradient(#f6d860 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+/* Pepperoni dot pattern */
+.pepperoni-pattern {
+  position: relative;
+}
+
+.pepperoni-pattern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle, #c53030 8px, transparent 8px);
+  background-size: 50px 50px;
+  background-position: 0 0, 25px 25px;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+/* Banner badge */
+.pizza-badge {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background-color: #e53e3e;
+  color: white;
+  font-family: 'Amatic SC', cursive;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-radius: 9999px;
+  transform: rotate(-2deg);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Pizza-themed card */
+.pizza-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+}
+
+.pizza-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.pizza-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #f05545, #f4c145, #d4e157);
+}
+
+/* Tomato sauce accent */
+.tomato-sauce-accent {
+  position: relative;
+}
+
+.tomato-sauce-accent::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  height: 4px;
+  width: 60px;
+  background-color: #e53e3e;
+  border-radius: 2px;
+}
+
+/* Italian flag accent */
+.italian-flag-accent {
+  position: relative;
+}
+
+.italian-flag-accent::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 80%;
+  background: linear-gradient(to bottom, #008C45 33.3%, #F4F5F0 33.3%, #F4F5F0 66.6%, #CD212A 66.6%);
+  border-radius: 2px;
+}
+
+/* Wood-fired texture */
+.wood-fired-texture {
+  background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+  background-color: #f8f4e9;
+}
+
+/* Basil leaf decorations */
+.basil-decoration {
+  position: relative;
+}
+
+.basil-decoration::after {
+  content: '🌿';
+  position: absolute;
+  font-size: 1.5rem;
+  transform: rotate(30deg);
+}
+
+/* Price tag */
+.pizza-price-tag {
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  background-color: #f8f4e9;
+  border: 2px dashed #e53e3e;
+  border-radius: 8px;
+  color: #e53e3e;
+  font-weight: bold;
+  transform: rotate(-2deg);
+}
+
+/* Pizza card hover effects */
+.pizza-card-hover {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.pizza-card-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://www.transparenttextures.com/patterns/cooking-pattern.png'), linear-gradient(135deg, #f8f4e9, #f5f5f5);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+
+.pizza-card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.05);
+}
+
+.pizza-card-hover:hover::before {
+  opacity: 0.05;
+}
+
+.pizza-card-hover .pizza-card-rotate {
+  transition: transform 0.6s ease;
+}
+
+.pizza-card-hover:hover .pizza-card-rotate {
+  transform: rotate(-3deg);
+}
+
+/* Rotating pizza icon on hover */
+.rotating-pizza-icon {
+  transition: transform 0.8s ease;
+}
+
+.pizza-card:hover .rotating-pizza-icon {
+  transform: rotate(180deg);
+}
+
+/* Dripping sauce animation for buttons */
+.sauce-drip-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.sauce-drip-button::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  bottom: -6px;
+  background-image:
+    radial-gradient(circle at 10% 0, #c53030 0%, #c53030 45%, transparent 45%),
+    radial-gradient(circle at 30% 0, #c53030 0%, #c53030 45%, transparent 45%),
+    radial-gradient(circle at 50% 0, #c53030 0%, #c53030 45%, transparent 45%),
+    radial-gradient(circle at 70% 0, #c53030 0%, #c53030 45%, transparent 45%),
+    radial-gradient(circle at 90% 0, #c53030 0%, #c53030 45%, transparent 45%);
+  background-size: 20% 100%;
+  transition: transform 0.3s ease;
+  transform: translateY(-100%);
+}
+
+.sauce-drip-button:hover::after {
+  transform: translateY(0);
+}
+
+/* Melting cheese reveal effect */
+.cheese-reveal {
+  position: relative;
+}
+
+.cheese-reveal::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    #fcf3d4,
+    #fcf3d4 10px,
+    #f6d860 10px,
+    #f6d860 20px
+  );
+  opacity: 1;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+}
+
+.cheese-reveal:hover::after {
+  opacity: 0;
+}
+
+/* Import this file in index.css */

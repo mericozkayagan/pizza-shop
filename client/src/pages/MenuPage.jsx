@@ -53,16 +53,57 @@ const MenuPage = () => {
 
   return (
     <MainLayout>
-      <div className="w-full bg-[url('https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg')] bg-cover bg-center py-20">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h1 className="text-5xl font-extrabold text-white mb-6 drop-shadow-lg">Our Delicious Menu</h1>
-          <p className="text-xl text-white max-w-2xl mx-auto mb-8 drop-shadow-md">
+      {/* Hero Banner with Texture Overlay */}
+      <div className="relative overflow-hidden">
+        {/* Main background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg)',
+            filter: 'brightness(0.85)'
+          }}
+        ></div>
+
+        {/* Texture overlay */}
+        <div
+          className="absolute inset-0 opacity-15"
+          style={{
+            backgroundImage: "url('https://www.transparenttextures.com/patterns/checkered-pattern.png')",
+            mixBlendMode: 'multiply'
+          }}
+        ></div>
+
+        {/* Dark overlay with gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
+
+        {/* Content */}
+        <div className="relative z-10 max-w-4xl mx-auto text-center px-6 py-24">
+          <div className="inline-block mb-3 px-4 py-1 rounded-full bg-red-600 shadow-lg transform -rotate-1">
+            <span className="text-white font-medium text-sm tracking-wide">Authentic Italian Recipes</span>
+          </div>
+          <h1 className="menu-banner-title mb-4 transform hover:scale-105 transition-transform duration-500 text-white">
+            Our Delicious Menu
+          </h1>
+          <p className="menu-banner-text max-w-2xl mx-auto mb-8 text-white">
             Handcrafted with fresh ingredients and baked to perfection in our wood-fired ovens
           </p>
+
+          {/* Pizza icon decoration */}
+          <div className="absolute left-10 top-20 opacity-20 hidden lg:block">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="white">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.49 3.49-7.51-7.51 3.49-3.49 7.51zm5.5-6c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"/>
+            </svg>
+          </div>
+
+          <div className="absolute right-10 bottom-20 opacity-20 hidden lg:block">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="white">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.49 3.49-7.51-7.51 3.49-3.49 7.51zm5.5-6c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"/>
+            </svg>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {!tableId && (
           <div className="bg-red-50 border-2 border-red-300 rounded-lg p-4 mb-8 max-w-2xl mx-auto shadow-md">
             <div className="flex items-center">
@@ -72,7 +113,7 @@ const MenuPage = () => {
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-base font-medium text-red-800">
+                <p className="text-ui-bold">
                   Please select a table before placing your order
                 </p>
                 <div className="mt-2">
@@ -101,26 +142,36 @@ const MenuPage = () => {
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm text-red-700">{error}</p>
+                <p className="notice-text text-red-700">{error}</p>
               </div>
             </div>
           </div>
         ) : (
           <>
-            {/* Categories tabs */}
-            <div className="mb-12 bg-white rounded-xl shadow-md p-2 max-w-4xl mx-auto">
-              <div className="flex flex-wrap justify-center">
+            {/* Category Selector */}
+            <div className="mb-8">
+              <h2 className="menu-section-title text-center mb-6">Our Menu Categories</h2>
+              <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+                <button
+                  onClick={() => setActiveCategory(null)}
+                  className={`px-4 py-2 rounded-full border-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1
+                    ${!activeCategory
+                      ? 'bg-red-600 text-white border-red-700 font-bold'
+                      : 'bg-white text-red-600 border-red-200 hover:border-red-400'
+                    }`}
+                >
+                  All Items
+                </button>
+
                 {categories.map((category) => (
                   <button
                     key={category.id}
-                    onClick={() => handleCategoryChange(category.id)}
-                    className={`
-                      relative px-6 py-3 mx-2 my-1 font-medium text-base rounded-full
-                      transition-all duration-200 ease-in-out
+                    onClick={() => setActiveCategory(category.id)}
+                    className={`px-4 py-2 rounded-full border-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1
                       ${activeCategory === category.id
-                        ? 'bg-red-600 text-white shadow-md'
-                        : 'bg-white text-gray-700 hover:bg-red-50 border border-gray-200'}
-                    `}
+                        ? 'bg-red-600 text-white border-red-700 font-bold'
+                        : 'bg-white text-red-600 border-red-200 hover:border-red-400'
+                      }`}
                   >
                     {category.name}
                   </button>
@@ -136,56 +187,79 @@ const MenuPage = () => {
             </div>
 
             {filteredItems.length === 0 && (
-              <div className="text-center py-12 bg-white rounded-lg shadow-md max-w-xl mx-auto">
-                <img
-                  src="https://img.icons8.com/color/96/000000/nothing-found.png"
-                  alt="No items found"
-                  className="w-24 h-24 mx-auto mb-4"
-                />
-                <h3 className="text-xl font-bold text-gray-800">No items found</h3>
-                <p className="mt-2 text-gray-600">
-                  We're currently updating our menu for this category.
-                  <br />Please check back soon or try another category!
-                </p>
+              <div className="text-center py-12 bg-gray-50 rounded-xl border border-gray-200">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-16 w-16 mx-auto text-gray-400 mb-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+                  />
+                </svg>
+                <h3 className="handwritten-note text-center mb-2 text-2xl">Mamma mia!</h3>
+                <p className="text-body-md mb-2">We couldn't find any menu items matching your selection.</p>
+                <p className="text-body-sm">Try selecting a different category or check back later for new additions to our menu.</p>
               </div>
             )}
 
-            {/* Pizza shop decorative elements */}
-            <div className="mt-16 py-8 bg-red-50 rounded-lg relative overflow-hidden">
-              <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
-                <h2 className="text-3xl font-bold text-red-800 mb-4">We Take Pride in Our Food</h2>
-                <p className="text-lg text-red-700 mb-6">
-                  Our pizzas are made with fresh, locally-sourced ingredients and baked in traditional wood-fired ovens.
-                </p>
-                <div className="flex flex-wrap justify-center gap-8 text-center">
-                  <div className="p-4">
-                    <div className="rounded-full bg-white p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center shadow-md">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+            {/* Restaurant Features */}
+            <div className="mt-16 bg-white shadow-xl rounded-xl overflow-hidden max-w-5xl mx-auto">
+              <div className="pizza-crust-border m-4">
+                <div className="text-center py-8 px-4">
+                  <div className="pizza-accent-title mb-6">Taste the Authentic Italian Tradition</div>
+                  <p className="text-body-lg text-red-700 mb-8 max-w-3xl mx-auto">
+                    Our chefs prepare each pizza with carefully selected ingredients and traditional techniques passed down through generations.
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="text-center">
+                      <div className="mb-3">
+                        <span className="inline-block p-3 bg-red-100 rounded-full">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+                          </svg>
+                        </span>
+                      </div>
+                      <h3 className="heading-6 text-red-800 mb-2">Wood-Fired Perfection</h3>
+                      <p className="text-body-sm">Our pizzas are baked in authentic wood-fired ovens at 850°F to achieve the perfect crust.</p>
                     </div>
-                    <h3 className="font-semibold text-red-800">Fast Preparation</h3>
+
+                    <div className="text-center">
+                      <div className="mb-3">
+                        <span className="inline-block p-3 bg-red-100 rounded-full">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </span>
+                      </div>
+                      <h3 className="heading-6 text-red-800 mb-2">Premium Ingredients</h3>
+                      <p className="text-body-sm">We import San Marzano tomatoes and use only the finest local and imported ingredients.</p>
+                    </div>
+
+                    <div className="text-center">
+                      <div className="mb-3">
+                        <span className="inline-block p-3 bg-red-100 rounded-full">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </span>
+                      </div>
+                      <h3 className="heading-6 text-red-800 mb-2">Customer Happiness</h3>
+                      <p className="text-body-sm">Our customers' satisfaction is our priority - that's why we make every pizza with love.</p>
+                    </div>
                   </div>
-                  <div className="p-4">
-                    <div className="rounded-full bg-white p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center shadow-md">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
-                      </svg>
-                    </div>
-                    <h3 className="font-semibold text-red-800">Fresh Ingredients</h3>
-                  </div>
-                  <div className="p-4">
-                    <div className="rounded-full bg-white p-3 w-16 h-16 mx-auto mb-3 flex items-center justify-center shadow-md">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <h3 className="font-semibold text-red-800">Customer Satisfaction</h3>
+
+                  <div className="mt-8 text-center">
+                    <span className="italian-phrase">"La vita è una combinazione di magia e pasta"</span>
                   </div>
                 </div>
-              </div>
-              <div className="absolute inset-0 opacity-10 z-0">
-                <div className="absolute inset-0 bg-repeat" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/food.png')" }}></div>
               </div>
             </div>
           </>

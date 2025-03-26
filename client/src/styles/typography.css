@@ -1,0 +1,301 @@
+/* Typography System - Pizza Paradise
+ *
+ * This file provides consistent text styling across the application.
+ * Use these classes to maintain typography consistency.
+ */
+
+/* Font families */
+.font-display {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-body {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Headings */
+.heading-1 {
+  @apply font-display text-5xl font-bold text-gray-900 leading-tight tracking-tight;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.heading-2 {
+  @apply font-display text-4xl font-bold text-gray-900 leading-tight tracking-tight;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.heading-3 {
+  @apply font-display text-3xl font-bold text-gray-900 leading-snug tracking-tight;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.heading-4 {
+  @apply font-display text-2xl font-bold text-gray-900 leading-snug tracking-tight;
+}
+
+.heading-5 {
+  @apply font-display text-xl font-semibold text-gray-900 leading-snug;
+}
+
+.heading-6 {
+  @apply font-display text-lg font-semibold text-gray-900 leading-snug;
+}
+
+/* Page titles */
+.page-title {
+  @apply font-display text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.025em;
+}
+
+/* Section titles */
+.section-title {
+  @apply font-display text-2xl md:text-3xl font-bold text-gray-800 mb-4 tracking-tight;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Paragraph text */
+.text-body {
+  @apply font-body text-base text-gray-700 leading-normal;
+}
+
+.text-body-lg {
+  @apply font-body text-lg text-gray-700 leading-relaxed;
+}
+
+.text-body-sm {
+  @apply font-body text-sm text-gray-600 leading-normal;
+}
+
+/* UI text */
+.text-ui {
+  @apply font-body text-sm text-gray-700;
+}
+
+.text-ui-bold {
+  @apply font-body text-sm font-medium text-gray-800;
+}
+
+/* Cards */
+.card-title {
+  @apply font-display text-xl font-bold text-gray-800 mb-2 tracking-tight;
+}
+
+.card-subtitle {
+  @apply font-body text-sm font-medium text-gray-600 mb-4;
+}
+
+.card-body {
+  @apply font-body text-base text-gray-600;
+}
+
+/* Labels, buttons, and inputs */
+.label {
+  @apply font-body text-sm font-medium text-gray-700 mb-1;
+}
+
+.button-text {
+  @apply font-body font-medium;
+}
+
+.input-text {
+  @apply font-body text-base text-gray-800;
+}
+
+/* Banners and notices */
+.banner-text {
+  @apply font-body text-base text-white font-medium;
+}
+
+.notice-text {
+  @apply font-body text-sm text-gray-700 leading-snug;
+}
+
+/* Background image text */
+.bg-image-text-title {
+  @apply font-display font-bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.bg-image-text-body {
+  @apply font-body font-medium;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.6);
+  letter-spacing: 0.01em;
+}
+
+/* Utils */
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+/* Special text treatments */
+.menu-category-text {
+  @apply font-display text-base font-medium;
+}
+
+.price-text {
+  @apply font-display font-bold text-lg;
+}
+
+.table-number {
+  @apply font-display font-bold text-xl leading-none;
+}
+
+.table-capacity {
+  @apply font-body text-sm text-gray-600;
+}
+
+/* Footer Headings */
+.footer-heading {
+  @apply font-display text-xl font-bold text-white leading-tight tracking-tight;
+}
+
+/* Menu title for banners */
+.menu-banner-title {
+  @apply font-display text-5xl md:text-6xl font-bold text-white tracking-tight;
+  text-shadow: 2px 2px 0 #b91c1c, 3px 3px 0 rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.025em;
+}
+
+.menu-banner-text {
+  @apply font-body text-xl md:text-2xl font-medium text-white;
+  text-shadow: 1px 1px 0 #000, 0 0 10px rgba(0, 0, 0, 0.7);
+  letter-spacing: 0.01em;
+}
+
+/* Responsive text adjustments */
+@media (max-width: 640px) {
+  .heading-1 {
+    @apply text-4xl;
+  }
+
+  .heading-2 {
+    @apply text-3xl;
+  }
+
+  .heading-3 {
+    @apply text-2xl;
+  }
+
+  .page-title {
+    @apply text-3xl;
+  }
+
+  .menu-banner-title {
+    @apply text-4xl;
+  }
+
+  .menu-banner-text {
+    @apply text-lg;
+  }
+}
+
+/* Pizza-themed typography styles */
+
+.pizza-title {
+  @apply font-display text-4xl md:text-5xl font-bold text-red-700 tracking-tight;
+  text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.7), 3px 3px 0 rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.025em;
+}
+
+.pizza-accent-title {
+  font-family: 'Amatic SC', 'Satisfy', cursive;
+  @apply text-3xl md:text-4xl font-bold text-red-600 tracking-wide;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.pizza-slogan {
+  font-family: 'Satisfy', 'Amatic SC', cursive;
+  @apply text-xl md:text-2xl text-red-600 tracking-wide italic;
+}
+
+.ingredient-name {
+  @apply font-display text-base font-bold text-gray-800;
+}
+
+.menu-section-title {
+  font-family: 'Amatic SC', 'Satisfy', cursive;
+  @apply text-3xl md:text-4xl font-bold text-red-700 tracking-wide;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.handwritten-note {
+  font-family: 'Satisfy', 'Amatic SC', cursive;
+  @apply text-lg md:text-xl italic text-gray-700;
+  transform: rotate(-2deg);
+}
+
+/* Chef's special tag */
+.chefs-special {
+  font-family: 'Amatic SC', 'Satisfy', cursive;
+  @apply text-lg font-bold text-white bg-red-600 rounded-full px-3 py-1 inline-block transform -rotate-3;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Italian phrases */
+.italian-phrase {
+  font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+  @apply text-lg md:text-xl italic text-red-700;
+}
+
+/* Menu categories */
+.menu-category-header {
+  @apply font-display text-2xl font-bold text-red-700 relative;
+  padding-bottom: 10px;
+}
+
+.menu-category-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #e53e3e;
+  border-radius: 3px;
+}
+
+/* Price formatting */
+.large-price {
+  @apply font-display text-2xl font-bold text-red-600;
+}
+
+/* Review quotes */
+.review-quote {
+  @apply font-body text-base italic text-gray-600 relative pl-6;
+}
+
+.review-quote::before {
+  content: '"';
+  @apply font-display text-4xl absolute left-0 top-0 text-red-600 -mt-2;
+}
+
+/* Customer name */
+.customer-name {
+  @apply font-display text-base font-semibold text-gray-800;
+}
+
+/* Response typography */
+@media (max-width: 640px) {
+  .pizza-title {
+    @apply text-3xl;
+  }
+
+  .pizza-accent-title {
+    @apply text-2xl;
+  }
+
+  .pizza-slogan {
+    @apply text-lg;
+  }
+
+  .menu-section-title {
+    @apply text-3xl;
+  }
+}
