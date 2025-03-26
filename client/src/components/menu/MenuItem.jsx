@@ -6,10 +6,48 @@ import Button from '../ui/Button';
 const MenuItem = ({ item }) => {
   const { addToCart } = useCart();
   const [isHovering, setIsHovering] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
 
+  // Ensure the item is valid before adding to cart
   const handleAddToCart = () => {
-    addToCart(item);
+    if (!item || !item.id || !item.is_available) {
+      console.error('Cannot add invalid or unavailable item to cart:', item);
+      return;
+    }
+
+    setIsAdding(true);
+
+    try {
+      // Create a sanitized version of the item with all required properties
+      const sanitizedItem = {
+        id: item.id,
+        name: item.name || 'Unknown Item',
+        price: typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0,
+        image_url: item.image_url || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+        description: item.description || 'No description available',
+        is_available: item.is_available
+      };
+
+      // Add the sanitized item to cart
+      addToCart(sanitizedItem);
+
+      // Provide visual feedback
+      setTimeout(() => {
+        setIsAdding(false);
+      }, 500);
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+      setIsAdding(false);
+    }
   };
+
+  // If item is invalid, don't render anything
+  if (!item || !item.id) {
+    return null;
+  }
+
+  const itemPrice = typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0;
+  const isAvailable = !!item.is_available;
 
   return (
     <div
@@ -20,16 +58,19 @@ const MenuItem = ({ item }) => {
       <div className="relative">
         <img
           src={item.image_url || 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'}
-          alt={item.name}
+          alt={item.name || 'Menu Item'}
           className="w-full h-56 object-cover"
+          onError={(e) => {
+            e.target.src = 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60';
+          }}
         />
 
         {/* Price tag with improved visibility */}
         <div className="absolute top-0 right-0 bg-red-600 text-white font-bold py-2 px-4 rounded-bl-lg shadow-md">
-          ${parseFloat(item.price).toFixed(2)}
+          ${itemPrice.toFixed(2)}
         </div>
 
-        {!item.is_available && (
+        {!isAvailable && (
           <div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center">
             <div className="bg-red-600 text-white px-6 py-3 rounded-full text-lg font-bold transform -rotate-12 shadow-lg">
               Out of Stock
@@ -39,7 +80,7 @@ const MenuItem = ({ item }) => {
       </div>
 
       <div className="p-5 flex-grow flex flex-col">
-        <h3 className="text-xl font-bold text-gray-800 mb-2">{item.name}</h3>
+        <h3 className="text-xl font-bold text-gray-800 mb-2">{item.name || 'Unknown Item'}</h3>
         <p className="text-gray-600 flex-grow mb-4">
           {item.description || 'No description available'}
         </p>
@@ -70,15 +111,17 @@ const MenuItem = ({ item }) => {
       <div className="p-4 bg-gray-50 border-t border-gray-100">
         <button
           onClick={handleAddToCart}
-          disabled={!item.is_available}
+          disabled={!isAvailable || isAdding}
           className={`
             w-full py-3 px-4 rounded-lg font-bold text-white
             transition-all duration-300 flex items-center justify-center
-            ${item.is_available ? 'bg-red-600 hover:bg-red-700 shadow-md hover:shadow-lg' : 'bg-gray-400 cursor-not-allowed'}
+            ${isAvailable ? (isAdding ? 'bg-green-600' : 'bg-red-600 hover:bg-red-700 shadow-md hover:shadow-lg') : 'bg-gray-400 cursor-not-allowed'}
           `}
-          aria-label={item.is_available ? `Add ${item.name} to order` : `${item.name} is out of stock`}
+          aria-label={isAvailable ? `Add ${item.name || 'item'} to order` : `${item.name || 'This item'} is out of stock`}
         >
-          {item.is_available ? (
+          {isAdding ? (
+            'Added!'
+          ) : isAvailable ? (
             <>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />

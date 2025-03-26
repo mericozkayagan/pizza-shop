@@ -1,19 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../../contexts/CartContext';
 import Button from '../ui/Button';
 
 const CartItem = ({ item }) => {
-  const { updateQuantity, updateNotes, removeFromCart } = useCart();
+  const { updateQuantity, updateItemNotes, removeFromCart } = useCart();
   const [showNotes, setShowNotes] = useState(false);
-  const [notes, setNotes] = useState(item.notes || '');
+  const [notes, setNotes] = useState('');
+
+  // Initialize notes from item when the component mounts
+  useEffect(() => {
+    if (item && item.notes) {
+      setNotes(item.notes);
+    }
+  }, [item]);
+
+  // Safely handle price calculation with default fallbacks
+  const price = item && typeof item.price === 'number' ? item.price : 0;
+  const quantity = item && typeof item.quantity === 'number' ? item.quantity : 1;
+  const itemId = item && item.id ? item.id : null;
 
   const handleQuantityChange = (delta) => {
-    const newQuantity = Math.max(1, item.quantity + delta);
-    updateQuantity(item.menu_item_id, newQuantity);
+    if (!itemId) return;
+    const newQuantity = Math.max(1, quantity + delta);
+    updateQuantity(itemId, newQuantity);
   };
 
   const handleRemove = () => {
-    removeFromCart(item.menu_item_id);
+    if (!itemId) return;
+    removeFromCart(itemId);
   };
 
   const handleNotesChange = (e) => {
@@ -21,17 +35,23 @@ const CartItem = ({ item }) => {
   };
 
   const handleNotesSave = () => {
-    updateNotes(item.menu_item_id, notes);
+    if (!itemId) return;
+    updateItemNotes(itemId, notes);
     setShowNotes(false);
   };
+
+  // If item is invalid, don't render anything
+  if (!item || !itemId) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col py-4 border-b border-gray-200">
       <div className="flex justify-between">
         <div className="flex-grow">
-          <h3 className="font-medium text-gray-900">{item.name}</h3>
+          <h3 className="font-medium text-gray-900">{item.name || 'Unknown Item'}</h3>
           <p className="text-gray-600 text-sm">
-            ${item.price.toFixed(2)} x {item.quantity} = ${(item.price * item.quantity).toFixed(2)}
+            ${price.toFixed(2)} x {quantity} = ${(price * quantity).toFixed(2)}
           </p>
           {item.notes && !showNotes && (
             <p className="text-gray-500 text-xs mt-1 italic">{item.notes}</p>
@@ -41,19 +61,22 @@ const CartItem = ({ item }) => {
           <button
             onClick={() => handleQuantityChange(-1)}
             className="px-2 py-1 bg-gray-200 rounded-full hover:bg-gray-300"
+            aria-label="Decrease quantity"
           >
             -
           </button>
-          <span className="px-2">{item.quantity}</span>
+          <span className="px-2">{quantity}</span>
           <button
             onClick={() => handleQuantityChange(1)}
             className="px-2 py-1 bg-gray-200 rounded-full hover:bg-gray-300"
+            aria-label="Increase quantity"
           >
             +
           </button>
           <button
             onClick={handleRemove}
             className="ml-2 text-red-600 hover:text-red-800"
+            aria-label="Remove item"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

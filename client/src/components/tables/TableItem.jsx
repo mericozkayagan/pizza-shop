@@ -4,7 +4,7 @@ import { useCart } from '../../contexts/CartContext';
 
 const TableItem = ({ table, isSelectable = false, onSelect, isSelected = false }) => {
   const navigate = useNavigate();
-  const { setTableId } = useCart();
+  const { selectedTableId } = useCart();
 
   const handleClick = () => {
     if (isSelectable && onSelect) {
@@ -16,7 +16,7 @@ const TableItem = ({ table, isSelectable = false, onSelect, isSelected = false }
   const getTableStyle = () => {
     const baseStyle = 'transition-all duration-300 ease-in-out';
 
-    if (isSelected) {
+    if (isSelected || table.id === parseInt(selectedTableId)) {
       return `${baseStyle} bg-blue-100 border-blue-600 shadow-blue-200/50`;
     }
 

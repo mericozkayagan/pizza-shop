@@ -25,12 +25,7 @@ router.delete("/:id", verifyToken, isAdmin, tableController.deleteTable);
 // Assign server to table (staff/admin)
 router.put("/:id/server", verifyToken, isStaff, tableController.assignServer);
 
-// Update table status (staff/admin)
-router.put(
-  "/:id/status",
-  verifyToken,
-  isStaff,
-  tableController.updateTableStatus
-);
+// Update table status - accessible for customers to select tables
+router.put("/:id/status", tableController.updateTableStatus);
 
 module.exports = router;

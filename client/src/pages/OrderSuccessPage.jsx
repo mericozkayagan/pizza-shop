@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../contexts/CartContext';
 import MainLayout from '../components/layout/MainLayout';
 import Button from '../components/ui/Button';
 
 const OrderSuccessPage = () => {
   const navigate = useNavigate();
+  const { clearCart } = useCart();
+
+  // Ensure cart is cleared when this page is reached
+  useEffect(() => {
+    clearCart();
+  }, [clearCart]);
+
+  const handleReturnToMenu = () => {
+    navigate('/menu');
+  };
+
+  const handleOrderForAnotherTable = () => {
+    navigate('/select-table');
+  };
 
   return (
     <MainLayout>
@@ -18,8 +33,12 @@ const OrderSuccessPage = () => {
 
           <h1 className="text-2xl font-bold text-gray-800 mb-3">Order Placed Successfully!</h1>
 
-          <p className="text-gray-600 mb-6">
-            Thank you for your order. Your delicious pizza is being prepared and will be served to your table shortly.
+          <p className="text-gray-600 mb-4">
+            Thank you for your order. Your delicious food is being prepared and will be served to your table shortly.
+          </p>
+
+          <p className="text-gray-500 text-sm mb-4">
+            Your cart has been cleared for your convenience.
           </p>
 
           <p className="text-gray-500 text-sm mb-8">
@@ -28,7 +47,7 @@ const OrderSuccessPage = () => {
 
           <div className="flex flex-col space-y-3">
             <Button
-              onClick={() => navigate('/menu')}
+              onClick={handleReturnToMenu}
               fullWidth
             >
               Return to Menu
@@ -36,7 +55,7 @@ const OrderSuccessPage = () => {
 
             <Button
               variant="secondary"
-              onClick={() => navigate('/select-table')}
+              onClick={handleOrderForAnotherTable}
               fullWidth
             >
               Order for Another Table

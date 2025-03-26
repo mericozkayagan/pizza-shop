@@ -118,7 +118,25 @@ exports.updateTable = async (req, res) => {
       [number, capacity, status, x_position, y_position, server_id, id]
     );
 
-    res.status(200).json(result.rows[0]);
+    // Fetch the updated table with server name
+    const updatedTableResult = await db.query(
+      `
+      SELECT t.*, u.name as server_name
+      FROM tables t
+      LEFT JOIN users u ON t.server_id = u.id
+      WHERE t.id = $1
+    `,
+      [id]
+    );
+
+    const updatedTable = updatedTableResult.rows[0];
+
+    // Broadcast the table update via WebSocket
+    if (global.broadcastTableUpdate) {
+      global.broadcastTableUpdate(updatedTable);
+    }
+
+    res.status(200).json(updatedTable);
   } catch (error) {
     console.error("Error updating table:", error);
     res.status(500).json({ message: "Error updating table" });
@@ -198,7 +216,25 @@ exports.assignServer = async (req, res) => {
       [server_id, id]
     );
 
-    res.status(200).json(result.rows[0]);
+    // Fetch the updated table with server name
+    const updatedTableResult = await db.query(
+      `
+      SELECT t.*, u.name as server_name
+      FROM tables t
+      LEFT JOIN users u ON t.server_id = u.id
+      WHERE t.id = $1
+    `,
+      [id]
+    );
+
+    const updatedTable = updatedTableResult.rows[0];
+
+    // Broadcast the table update via WebSocket
+    if (global.broadcastTableUpdate) {
+      global.broadcastTableUpdate(updatedTable);
+    }
+
+    res.status(200).json(updatedTable);
   } catch (error) {
     console.error("Error assigning server to table:", error);
     res.status(500).json({ message: "Error assigning server to table" });
@@ -222,11 +258,9 @@ exports.updateTableStatus = async (req, res) => {
 
     // Validate status
     if (!["available", "occupied", "reserved"].includes(status)) {
-      return res
-        .status(400)
-        .json({
-          message: "Invalid status. Must be available, occupied, or reserved",
-        });
+      return res.status(400).json({
+        message: "Invalid status. Must be available, occupied, or reserved",
+      });
     }
 
     const result = await db.query(
@@ -234,7 +268,25 @@ exports.updateTableStatus = async (req, res) => {
       [status, id]
     );
 
-    res.status(200).json(result.rows[0]);
+    // Fetch the updated table with server name
+    const updatedTableResult = await db.query(
+      `
+      SELECT t.*, u.name as server_name
+      FROM tables t
+      LEFT JOIN users u ON t.server_id = u.id
+      WHERE t.id = $1
+    `,
+      [id]
+    );
+
+    const updatedTable = updatedTableResult.rows[0];
+
+    // Broadcast the table update via WebSocket
+    if (global.broadcastTableUpdate) {
+      global.broadcastTableUpdate(updatedTable);
+    }
+
+    res.status(200).json(updatedTable);
   } catch (error) {
     console.error("Error updating table status:", error);
     res.status(500).json({ message: "Error updating table status" });

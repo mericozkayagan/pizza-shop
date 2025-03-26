@@ -124,7 +124,14 @@ const AdminPage = () => {
             {/* Quick Actions */}
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Button
+                  onClick={() => navigate('/admin/orders')}
+                  variant="primary"
+                  fullWidth
+                >
+                  Manage Orders
+                </Button>
                 <Button
                   onClick={() => navigate('/admin/menu')}
                   variant="primary"

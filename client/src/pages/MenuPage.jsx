@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { menuAPI } from '../api/api';
+import { menuAPI, tableAPI } from '../api/api';
 import MainLayout from '../components/layout/MainLayout';
 import MenuItem from '../components/menu/MenuItem';
 import { useCart } from '../contexts/CartContext';
@@ -12,7 +12,8 @@ const MenuPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const { tableId } = useCart();
+  const [selectedTable, setSelectedTable] = useState(null);
+  const { selectedTableId } = useCart();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +42,22 @@ const MenuPage = () => {
 
     fetchData();
   }, []);
+
+  // Fetch table info when selectedTableId changes
+  useEffect(() => {
+    const fetchTableInfo = async () => {
+      if (!selectedTableId) return;
+
+      try {
+        const response = await tableAPI.getTableById(selectedTableId);
+        setSelectedTable(response.data);
+      } catch (err) {
+        console.error('Error fetching table info:', err);
+      }
+    };
+
+    fetchTableInfo();
+  }, [selectedTableId]);
 
   const handleCategoryChange = (categoryId) => {
     setActiveCategory(categoryId);
@@ -104,7 +121,7 @@ const MenuPage = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        {!tableId && (
+        {!selectedTableId ? (
           <div className="bg-red-50 border-2 border-red-300 rounded-lg p-4 mb-8 max-w-2xl mx-auto shadow-md">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -124,6 +141,24 @@ const MenuPage = () => {
                     Select a Table
                   </Link>
                 </div>
+              </div>
+            </div>
+          </div>
+        ) : selectedTable && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-8 max-w-2xl mx-auto shadow-md">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <svg className="h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-ui-bold text-green-800">
+                  You've selected <span className="font-bold">Table #{selectedTable.number}</span> ({selectedTable.capacity} seats)
+                </p>
+                <p className="text-sm text-green-700 mt-1">
+                  Your order will be served at this table
+                </p>
               </div>
             </div>
           </div>

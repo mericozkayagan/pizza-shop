@@ -46,6 +46,9 @@ const MainLayout = ({ children }) => {
                     <Link to="/admin" className="inline-flex items-center px-3 py-2 text-gray-900 font-medium hover:text-red-600 transition-colors">
                       Dashboard
                     </Link>
+                    <Link to="/admin/orders" className="inline-flex items-center px-3 py-2 text-gray-900 font-medium hover:text-red-600 transition-colors">
+                      Manage Orders
+                    </Link>
                     <Link to="/admin/menu" className="inline-flex items-center px-3 py-2 text-gray-900 font-medium hover:text-red-600 transition-colors">
                       Manage Menu
                     </Link>
@@ -137,6 +140,9 @@ const MainLayout = ({ children }) => {
                 <>
                   <Link to="/admin" className="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-red-50" onClick={() => setMobileMenuOpen(false)}>
                     Dashboard
+                  </Link>
+                  <Link to="/admin/orders" className="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-red-50" onClick={() => setMobileMenuOpen(false)}>
+                    Manage Orders
                   </Link>
                   <Link to="/admin/menu" className="block px-3 py-2 text-base font-medium text-gray-900 hover:bg-red-50" onClick={() => setMobileMenuOpen(false)}>
                     Manage Menu

@@ -4,6 +4,7 @@ import { tableAPI } from '../api/api';
 import MainLayout from '../components/layout/MainLayout';
 import TableItem from '../components/tables/TableItem';
 import Button from '../components/ui/Button';
+import { useCart } from '../contexts/CartContext';
 
 const SelectTablePage = () => {
   const [tables, setTables] = useState([]);
@@ -12,6 +13,7 @@ const SelectTablePage = () => {
   const [selectedTable, setSelectedTable] = useState(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { setSelectedTableId } = useCart();
 
   useEffect(() => {
     const fetchTables = async () => {
@@ -31,24 +33,59 @@ const SelectTablePage = () => {
 
     // Set up real-time updates (using WebSocket)
     let ws;
-    try {
-      ws = new WebSocket('ws://localhost:8000/ws/tables');
+    const connectWebSocket = () => {
+      try {
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsHost = window.location.hostname === 'localhost' ? 'localhost:8000' : window.location.host;
+        const wsUrl = `${wsProtocol}//${wsHost}/ws/tables`;
 
-      ws.onmessage = (event) => {
-        const updatedTable = JSON.parse(event.data);
-        setTables(prevTables =>
-          prevTables.map(table =>
-            table.id === updatedTable.id ? updatedTable : table
-          )
-        );
-      };
+        console.log('Connecting to WebSocket at:', wsUrl);
+        ws = new WebSocket(wsUrl);
 
-      ws.onerror = (error) => {
-        console.log('WebSocket error:', error);
-      };
-    } catch (err) {
-      console.error('WebSocket connection error:', err);
-    }
+        ws.onopen = () => {
+          console.log('WebSocket connection established');
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+
+            // Handle connection message
+            if (data.type === 'connection') {
+              console.log('WebSocket message:', data.message);
+              return;
+            }
+
+            // Handle table update
+            console.log('Table update received:', data);
+
+            setTables(prevTables =>
+              prevTables.map(table =>
+                table.id === data.id ? data : table
+              )
+            );
+          } catch (err) {
+            console.error('Error processing WebSocket message:', err);
+          }
+        };
+
+        ws.onerror = (error) => {
+          console.error('WebSocket error:', error);
+        };
+
+        ws.onclose = (event) => {
+          console.log('WebSocket connection closed:', event.code, event.reason);
+          // Try to reconnect with exponential backoff
+          setTimeout(connectWebSocket, 3000);
+        };
+      } catch (err) {
+        console.error('WebSocket connection error:', err);
+        // Try to reconnect with exponential backoff
+        setTimeout(connectWebSocket, 3000);
+      }
+    };
+
+    connectWebSocket();
 
     return () => {
       if (ws) {
@@ -135,12 +172,35 @@ const SelectTablePage = () => {
 
   const handleConfirmSelection = async () => {
     try {
-      await tableAPI.updateStatus(selectedTable.id, 'occupied');
-      setIsConfirmModalOpen(false);
-      navigate('/menu');
+      // Use a try-catch block to handle any errors during table status update
+      const response = await tableAPI.updateStatus(selectedTable.id, 'occupied');
+
+      if (response && response.data) {
+        console.log('Table status updated successfully:', response.data);
+
+        // Store selected table ID in context
+        setSelectedTableId(selectedTable.id);
+
+        // Close the confirmation modal
+        setIsConfirmModalOpen(false);
+
+        // Navigate to the menu page
+        navigate('/menu');
+      } else {
+        throw new Error('Invalid response from server');
+      }
     } catch (err) {
       console.error('Error updating table status:', err);
-      setError('Failed to reserve table. Please try again.');
+
+      // Display a more specific error message if available
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(`Failed to reserve table: ${err.response.data.message}`);
+      } else {
+        setError('Failed to reserve table. Please try again.');
+      }
+
+      // Keep the modal open if there was an error
+      // setIsConfirmModalOpen(false);
     }
   };
 

@@ -16,27 +16,57 @@ export const CartProvider = ({ children }) => {
 
   // Load cart from localStorage on mount
   useEffect(() => {
+    try {
     const savedCart = localStorage.getItem('cart');
     const savedTableId = localStorage.getItem('selectedTableId');
-    if (savedCart) setCartItems(JSON.parse(savedCart));
-    if (savedTableId) setSelectedTableId(savedTableId);
+
+      if (savedCart) {
+        const parsedCart = JSON.parse(savedCart);
+        if (Array.isArray(parsedCart)) {
+          setCartItems(parsedCart);
+        }
+      }
+
+      if (savedTableId) {
+        setSelectedTableId(savedTableId);
+      }
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
+      // If there's an error with saved data, reset to defaults
+      localStorage.removeItem('cart');
+      localStorage.removeItem('selectedTableId');
+    }
   }, []);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
+    try {
     localStorage.setItem('cart', JSON.stringify(cartItems));
+    } catch (error) {
+      console.error('Error saving cart to localStorage:', error);
+    }
   }, [cartItems]);
 
   // Save selected table to localStorage whenever it changes
   useEffect(() => {
+    try {
     if (selectedTableId) {
       localStorage.setItem('selectedTableId', selectedTableId);
     } else {
       localStorage.removeItem('selectedTableId');
+      }
+    } catch (error) {
+      console.error('Error saving selectedTableId to localStorage:', error);
     }
   }, [selectedTableId]);
 
   const addToCart = (item) => {
+    if (!item || !item.id) {
+      console.error('Cannot add invalid item to cart:', item);
+      return;
+    }
+
+    try {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(i => i.id === item.id);
       if (existingItem) {
@@ -48,17 +78,36 @@ export const CartProvider = ({ children }) => {
       }
       return [...prevItems, { ...item, quantity: 1 }];
     });
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
   };
 
   const removeFromCart = (itemId) => {
+    if (!itemId) {
+      console.error('Cannot remove item with invalid ID');
+      return;
+    }
+
+    try {
     setCartItems(prevItems => prevItems.filter(item => item.id !== itemId));
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
+    }
   };
 
   const updateQuantity = (itemId, quantity) => {
+    if (!itemId) {
+      console.error('Cannot update quantity for item with invalid ID');
+      return;
+    }
+
+    try {
     if (quantity < 1) {
       removeFromCart(itemId);
       return;
     }
+
     setCartItems(prevItems =>
       prevItems.map(item =>
         item.id === itemId
@@ -66,16 +115,29 @@ export const CartProvider = ({ children }) => {
           : item
       )
     );
+    } catch (error) {
+      console.error('Error updating item quantity:', error);
+    }
   };
 
   const clearCart = () => {
+    try {
     setCartItems([]);
     setSelectedTableId(null);
     localStorage.removeItem('cart');
     localStorage.removeItem('selectedTableId');
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+    }
   };
 
   const updateItemNotes = (itemId, notes) => {
+    if (!itemId) {
+      console.error('Cannot update notes for item with invalid ID');
+      return;
+    }
+
+    try {
     setCartItems(prevItems =>
       prevItems.map(item =>
         item.id === itemId
@@ -83,10 +145,35 @@ export const CartProvider = ({ children }) => {
           : item
       )
     );
+    } catch (error) {
+      console.error('Error updating item notes:', error);
+    }
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    try {
+      return cartItems.reduce((total, item) => {
+        // Ensure price and quantity are valid numbers
+        const price = typeof item.price === 'number' ? item.price : 0;
+        const quantity = typeof item.quantity === 'number' ? item.quantity : 0;
+        return total + (price * quantity);
+      }, 0);
+    } catch (error) {
+      console.error('Error calculating total:', error);
+      return 0;
+    }
+  };
+
+  const getTotalItems = () => {
+    try {
+      return cartItems.reduce((sum, item) => {
+        const quantity = typeof item.quantity === 'number' ? item.quantity : 0;
+        return sum + quantity;
+      }, 0);
+    } catch (error) {
+      console.error('Error calculating total items:', error);
+      return 0;
+    }
   };
 
   const value = {
@@ -99,7 +186,7 @@ export const CartProvider = ({ children }) => {
     updateItemNotes,
     clearCart,
     calculateTotal,
-    totalItems: cartItems.reduce((sum, item) => sum + item.quantity, 0)
+    totalItems: getTotalItems()
   };
 
   return (
